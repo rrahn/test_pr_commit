@@ -7,8 +7,6 @@ on: pull_request_target
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions: 
-      pull-requests: write
     steps:
       - name: Comment on this PR
         uses: mshick/add-pr-comment@v2 # b8f338c590a895d50bcbfa6c5859251edc8952fc
