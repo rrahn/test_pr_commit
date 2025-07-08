@@ -1,0 +1,19 @@
+name: nf-core template version comment
+# This workflow is triggered on PRs to check if the pipeline template version matches the latest nf-core version.
+# It posts a comment to the PR, even if it comes from a fork.
+
+on: pull_request_target
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on PR
+        uses: mshick/add-pr-comment@v2 # b8f338c590a895d50bcbfa6c5859251edc8952fc
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          allow-repeats: true
+          message: |
+            **Hello**
+            🌏
+            !
