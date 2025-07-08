@@ -8,12 +8,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Comment on PR
+      - name: Get number of commits in PR
+        id: pr_commits
+        run: |
+          pr_number=$(echo "${{ github.event.pull_request.number }}")
+          repo="${{ github.repository }}"
+          commits=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${repo}/pulls/${pr_number}" | jq '.commits')
+          echo "COMMIT_COUNT=$commits" >> $GITHUB_OUTPUT
+        
+      - name: Comment on this PR
         uses: mshick/add-pr-comment@v2 # b8f338c590a895d50bcbfa6c5859251edc8952fc
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
           allow-repeats: true
           message: |
-            **Hello**
-            🌏
-            !
+            > [!WARNING]
+            > Newer version of the nf-core template is available.
+            >
+            > Your pipeline is using an old version of the nf-core template: ${{ steps.read_yml.outputs['nf_core_version'] }}.
+            > Please update your pipeline to the latest version.
+            >
+            > For more documentation on how to update your pipeline, please see the [nf-core documentation](https://github.com/nf-core/tools?tab=readme-ov-file#sync-a-pipeline-with-the-template) and [Synchronisation documentation](https://nf-co.re/docs/contributing/sync).
