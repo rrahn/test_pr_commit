@@ -8,6 +8,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Get number of commits in PR
+        id: pr_commits
+        run: |
+          pr_number=$(echo "${{ github.event.pull_request.number }}")
+          repo="${{ github.repository }}"
+          commits=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${repo}/pulls/${pr_number}" | jq '.commits')
+          echo "COMMIT_COUNT=$commits" >> $GITHUB_OUTPUT
+        
       - name: Comment on this PR
         uses: mshick/add-pr-comment@v2 # b8f338c590a895d50bcbfa6c5859251edc8952fc
         with:
@@ -16,3 +25,4 @@ jobs:
             **Hello**
             🌏
             !
+            #commits: $COMMIT_COUNT
