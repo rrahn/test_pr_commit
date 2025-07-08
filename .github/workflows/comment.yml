@@ -8,7 +8,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Comment on PR
+      - name: Comment on this PR
         uses: mshick/add-pr-comment@v2 # b8f338c590a895d50bcbfa6c5859251edc8952fc
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
